@@ -11,6 +11,14 @@ long cards[] = {
     0, 0, 0, 0, 0, 0, 41, 0
 };
 
+long ranks[] = {
+    2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41
+};
+
+long suits[] = {
+    2, 3, 5, 7
+};
+
 typedef struct Card{
     long rank;
     long suit;

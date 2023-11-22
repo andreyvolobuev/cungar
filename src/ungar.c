@@ -65,6 +65,17 @@ short evaluate_hand(Hand h) {
     return total; 
 }
 
+
+int comp_cards(Card c, Hand h, int limit) {
+    for (int i = 0; i < limit; i++) {
+        if (c.rank == h[i].rank && c.suit == h[i].suit) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+
 int main(int argc, char* argv[]) {
     if (argc == 2) {
         Hand h;
@@ -81,7 +92,78 @@ int main(int argc, char* argv[]) {
         printf("%hi\n", x);
 
         return 0;
+    } else if (argc == 3) {
+        Hand h;
+        Poket p;
+        int argv_i = 0;
+        for (int i = 0; i < 2; i++) {
+            char rank = argv[1][argv_i];
+            char suit = argv[1][++argv_i];
+            h[i].rank = cards[rank % CARD_FIT_ARR_LEN];
+            h[i].suit = cards[suit % CARD_FIT_ARR_LEN];
+            p[i].rank = h[i].rank;
+            p[i].suit = h[i].suit;
+            argv_i++;
+        }
+
+        argv_i = 0;
+        for (int i = 2; i < 7; i++) {
+            char rank = argv[2][argv_i];
+            char suit = argv[2][++argv_i];
+            h[i].rank = cards[rank % CARD_FIT_ARR_LEN];
+            h[i].suit = cards[suit % CARD_FIT_ARR_LEN];
+            argv_i++;
+        }
+        short min;
+        short max;
+        short loosers;
+        short winners;
+        int runs = 0;
+        short x = evaluate_hand(h);
+
+        for (int i = 0; i < 13; i++) {
+            for (int n = 0; n < 4; n++) {
+
+                Card c1;
+                c1.rank = ranks[i];
+                c1.suit = suits[n];
+                int card_occupied = comp_cards(c1, h, 7);
+                if (card_occupied == 1) {
+                    continue;
+                }
+                h[0] = c1;
+
+                for (int j = 0; j < 13; j++) {
+                    for (int m = 0; m < 4; m++) {
+                        Card c2;
+                        c2.rank = ranks[j];
+                        c2.suit = suits[m];
+
+                        int card_occupied = comp_cards(c2, h, 7);
+                        if (card_occupied == 1) {
+                            continue;
+                        }
+                        h[0] = c2;
+
+                        short result = evaluate_hand(h);
+                        if (result < min) {
+                            max = result;
+                        }
+                        if (result > max) {
+                            min = result;
+                        }
+                        if (result < x) {
+                            winners++;
+                        } else {
+                            loosers++;
+                        }
+                    }
+                }
+            }
+        }
+
+        printf("%hi %hi/%hi %hi/%hi\n", x, loosers, winners, min, max);
+        return 0;
     }
-    printf("no hand specified");
     return 1;
 }
