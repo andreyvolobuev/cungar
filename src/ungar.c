@@ -51,8 +51,9 @@ short evaluate_hand(Hand h) {
         } else {
             // There's no straight flush on board and it makes no sense
             // to check for quads or full houses as at this point its not
-            // possible that these combinations might be on board. So we
-            // just return same value as in high card combination put on
+            // possible that having a flush among 7 cards (which we already have)
+            // you also have a quads or full house (check if you don't believe).
+            // So we just return same value as in high card combination put on
             // top of highest straight value
             total = suited[suited_cards_product % SUITED_LEN] - MAX_STRAIGHT;
         }
@@ -77,11 +78,11 @@ int main(int argc, char* argv[]) {
             argv_i++;
         }
 
-        short x = evaluate_hand(h);
-        printf("%hi\n", x);
+        short result = evaluate_hand(h);
+        printf("%hi\n", result);
 
         return 0;
     }
-    printf("no hand specified");
+    printf("no hand specified\n");
     return 1;
 }
